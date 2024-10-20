@@ -1,14 +1,18 @@
 #include <stdio.h>
 #include "cpu.h"
 #include "opcodes.h"
+#include "cpu_error.h"
 
 int main() {
-	cpu_t *cpu = new_cpu();
-	cpu->memory[0] = OPC_push_u8_as_u8;
-	cpu->memory[1] = 0x42;
-
+	cpu_t *cpu = new_cpu(0x10000);
+	cpu->memory[0] = 0b01111010;
+	cpu->memory[1] = 0b00000111;
+	cpu->memory[2] = 0xAB;
+	cpu->memory[3] = 0xCD;
 	do_opcode(cpu);
-
+	//while (1)
+	//	if (do_opcode(cpu));
+	//		do_error(cpu);
 	dump_registers(cpu);
 	free_cpu(cpu);
 	return 0;

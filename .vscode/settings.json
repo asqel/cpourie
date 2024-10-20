@@ -1,0 +1,10 @@
+{
+	"files.associations": {
+		"stdarg.h": "c",
+		"stdlib.h": "c",
+		"error.h": "c",
+		"cpu_error.h": "c",
+		"opcodes.h": "c",
+		"cpu.h": "c"
+	}
+}

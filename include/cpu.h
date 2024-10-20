@@ -3,16 +3,14 @@
 
 #include "types.h"
 
-#define MEM_SIZE 0x10000
-
 typedef struct {
-	u48 r_do[7];
-	u48 r_re[7];
-	u48 r_mi[7];
-	u48 r_fa[7];
-	u48 r_so[7];
-	u48 r_la[7];
-	u48 r_si[7];
+	u48 r_do[4];
+	u48 r_re[4];
+	u48 r_mi[4];
+	u48 r_fa[4];
+	u48 r_so[4];
+	u48 r_la[4];
+	u48 r_si[4];
 
 	u48 r_pc;
 	u48 r_sp;
@@ -32,10 +30,11 @@ typedef struct {
 
 typedef struct {
 	registers_t r;
-	u8 memory[MEM_SIZE];
+	u8 *memory;
+	u48 mem_size;
 } cpu_t;
 
-cpu_t *new_cpu();
+cpu_t *new_cpu(u48 mem_size);
 void free_cpu(cpu_t *cpu);
 
 void dump_registers(cpu_t *cpu);
