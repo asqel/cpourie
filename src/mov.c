@@ -61,6 +61,8 @@ int do_opcode_mov(cpu_t *cpu) {
 		for (int i = 0; i < size; i++) {
 			reg_ptr[i] = cpu->memory[cpu->r.r_pc + 2 + i];
 		}
+		cpu->r.r_pc += 2 + size;
+		return 0;
 	}
 	return -1;
 }

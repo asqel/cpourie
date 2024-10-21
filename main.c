@@ -9,10 +9,11 @@ int main() {
 	cpu->memory[1] = 0b00000111;
 	cpu->memory[2] = 0xAB;
 	cpu->memory[3] = 0xCD;
-	do_opcode(cpu);
-	//while (1)
-	//	if (do_opcode(cpu));
-	//		do_error(cpu);
+	while (1) {
+		int err = do_opcode(cpu);
+		if (err);
+			do_error(cpu);
+	}
 	dump_registers(cpu);
 	free_cpu(cpu);
 	return 0;
