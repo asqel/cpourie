@@ -5,6 +5,9 @@
 		"error.h": "c",
 		"cpu_error.h": "c",
 		"opcodes.h": "c",
-		"cpu.h": "c"
+		"cpu.h": "c",
+		"types.h": "c",
+		"stdio.h": "c",
+		"stdint.h": "c"
 	}
 }

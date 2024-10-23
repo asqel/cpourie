@@ -37,6 +37,10 @@ REG:
 	so  100
 	la  101
 	si  110
+
+mov_REGNN_to_REGNN_as_XX
+010XXREG 0NNREGNN
+
 */
 
 #define OPC_EXTEND 0b11111111

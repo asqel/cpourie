@@ -9,7 +9,7 @@ int set_error(int err) {
 }
 
 void do_error(cpu_t *cpu) {
-	printf("ERROR ON CPU\n");
+	printf("ERROR ON CPU %d\n", error_code);
 	dump_registers(cpu);
 	free_cpu(cpu);
 	exit(1);

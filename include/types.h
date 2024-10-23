@@ -52,14 +52,15 @@
 #define i48 i64
 
 typedef struct {
-	u32 int_part;
-	u32 dec_part;
+	i32 int_part;
+	i32 dec_part;
 } fpoint;
 
-#define fpoint_shift 0xffffffff
+#define fpoint_shift (1 << 30)
 
-#define fpoint_to_double(X) ((X).int_part + ((X).dec_part / fpoint_shift))
-#define double_to_fpoint(X) ((fpoint){.int_part = (u32)(X), .dec_part = (u32)(((X) - (u32)(X)) * fpoint_shift)})
+#define fpoint_to_double(X) (x.int_part + (double)x.dec_part / fpoint_shift)
+
+#define double_to_fpoint(X) ((fpoint){.int_part = (i32)(X), .dec_part = (i32)(fpoint_shift * ((X) - (i32)(X)))})
 
 #define MAX_u48 ((u48)0xFFFFFFFFFFFF)
 #define MAX_u32 ((u32)0x0000FFFFFFFF)

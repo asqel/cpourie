@@ -10,8 +10,8 @@ int main() {
 	cpu->memory[2] = 0xAB;
 	cpu->memory[3] = 0xCD;
 	while (1) {
-		int err = do_opcode(cpu);
-		if (err);
+		do_opcode(cpu);
+		if (error_code != err_none)
 			do_error(cpu);
 	}
 	dump_registers(cpu);
