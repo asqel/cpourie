@@ -79,7 +79,7 @@ int do_opcode(cpu_t *cpu) {
 				}
 				if (cpu->r.r_pc + 1 + v_size >= cpu->mem_size)
 					return set_error(err_phys_mem_not_present);
-				if (cpu->r.r_sp - cast_size >= cpu->mem_size)
+				if (cpu->r.r_sp - cast_size >= cpu->mem_size || cpu->r.r_sp >= cpu->mem_size)
 					return set_error(err_phys_mem_not_present);
 
 				cpu->r.r_sp -= cast_size;
@@ -90,7 +90,7 @@ int do_opcode(cpu_t *cpu) {
 				cpu->r.r_pc += 2 + v_size;
 				return set_error(err_none);
 			}
-			if (infos >> 7 == 1) {
+			else if (infos >> 7 == 1) {
 				u8 reg_num = infos & 0b111;
 				if (reg_num == 0b111)
 					return set_error(err_bad_opcode);
@@ -106,7 +106,7 @@ int do_opcode(cpu_t *cpu) {
 					case 0b101: value = &(cpu->r.r_la[reg_idx]); break;
 					case 0b110: value = &(cpu->r.r_si[reg_idx]); break;
 				}
-				if (cpu->r.r_sp - cast_size >= cpu->mem_size)
+				if (cpu->r.r_sp - cast_size >= cpu->mem_size || cpu->r.r_sp >= cpu->mem_size)
 					return set_error(err_phys_mem_not_present);
 				cpu->r.r_sp -= cast_size;
 				for (int i = 0; i < cast_size; i++)
@@ -114,6 +114,48 @@ int do_opcode(cpu_t *cpu) {
 				cpu->r.r_pc += 2;
 				return set_error(err_none);
 			}
+			else if (infos >> 6 == 0b01) {
+				if (cpu->r.r_sp - SIZEOF_fpoint >= cpu->mem_size || cpu->r.r_sp >= cpu->mem_size) {
+					return set_error(err_phys_mem_not_present);
+				}
+				u8 reg_num = infos & 0b111;
+				u8 reg_idx = (infos >> 3) & 0b111;
+				fpoint *value;
+				switch (reg_num) {
+					case 0b000: value = &(cpu->r.r_red[reg_idx]); break;
+					case 0b001: value = &(cpu->r.r_green[reg_idx]); break;
+					case 0b010: value = &(cpu->r.r_blue[reg_idx]); break;
+					case 0b011: value = &(cpu->r.r_magenta[reg_idx]); break;
+					case 0b100: value = &(cpu->r.r_yellow[reg_idx]); break;
+					case 0b101: value = &(cpu->r.r_cyan[reg_idx]); break;
+					case 0b110: value = &(cpu->r.r_white[reg_idx]); break;
+					case 0b111: value = &(cpu->r.r_black[reg_idx]); break;
+				}
+				cpu->r.r_sp -= SIZEOF_fpoint;
+				for (int i = 0; i < 4; i++)
+					cpu->memory[cpu->r.r_sp + i] = ((u8 *)(value->int_part))[i];
+				for (int i = 0; i < 4; i++)
+					cpu->memory[cpu->r.r_sp + i + 4] = ((u8 *)(value->dec_part))[i];
+				cpu->r.r_pc += 2;
+				return set_error(err_none);
+			}
+			else {
+				return set_error(err_bad_opcode);
+			}
+		case 0b00000010:
+			if (cpu->r.r_pc + SIZEOF_fpoint >= cpu->mem_size)
+				return set_error(err_phys_mem_not_present);
+			if (cpu->r.r_sp - SIZEOF_fpoint >= cpu->mem_size || cpu->r.r_sp >= cpu->mem_size)
+				return set_error(err_phys_mem_not_present);
+			cpu->r.r_sp -= SIZEOF_fpoint;
+			for (int i = 0; i < SIZEOF_fpoint; i++)
+				cpu->memory[cpu->r.r_sp + i] = cpu->memory[cpu->r.r_pc + i + 1];
+			cpu->r.r_pc += 1 + SIZEOF_fpoint;
+			return set_error(err_none);
+		case 0b00000011:
+			if (cpu->r.r_pc + 1 >= cpu->mem_size)
+				return set_error(err_phys_mem_not_present);
+			
 		default:
 			break;
 	}
