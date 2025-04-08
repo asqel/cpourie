@@ -1,0 +1,13 @@
+integers are presented as one of the following four types:
+	- u8  | 8  bits / 1 Byte
+	- u16 | 16 bits / 2 Bytes
+	- u32 | 32 bits / 4 Bytes
+
+they are store as little endian meaning the least significant Byte is the first in memory
+example:
+	0x00ABCDEF -> 0xEF, 0xCD, 0xAB, 0x00
+
+signed integers are written as follow:
+	-i8
+	-i16
+	-i32

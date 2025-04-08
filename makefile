@@ -1,7 +1,7 @@
 CC = gcc
 LD = gcc
 
-CFLAGS = -Iinclude
+CFLAGS = -Iinclude -Wall -Wextra
 LDFLAGS =
 
 DEBUG_FLAG = -g
@@ -9,18 +9,18 @@ DEBUG_FLAG = -g
 SRC = main.c $(wildcard src/*.c) $(wildcard src/*/*.c) $(wildcard src/*/*/*.c) $(wildcard src/*/*/*/*.c)
 BIN = $(SRC:.c=.o)
 
-OUT_DIR = build
+OUT_DIR = ./
 OUT_NAME = cpourie
 
 ifeq ($(OS),Windows_NT)
-		OUT = $(OUT_DIR)/$(OUT_NAME).exe
+	OUT = $(OUT_DIR)/$(OUT_NAME).exe
 else
 	OUT = $(OUT_DIR)/$(OUT_NAME)
 endif
 
 
 
-all: $(OUT) run
+all: $(OUT)
 
 build: $(OUT)
 
@@ -38,10 +38,9 @@ endif
 run:
 	./$(OUT)
 
-add_debug_flags:
-	CFLAGS += $(DEBUG_FLAG)
 
-debug: add_debug_flags build
+debug:
+	$(CC) $(DEBUG_FLAG) $(CFLAGS) $(SRC) $(LDFLAGS) -o $(OUT)
 	valgrind $(OUT)
 
 clean:
@@ -57,3 +56,7 @@ ifeq ($(OS),Windows_NT)
 else
 	rm -rf $(OUT)
 endif
+
+re: fclean all
+
+.PHONY: all build run debug clean fclean re

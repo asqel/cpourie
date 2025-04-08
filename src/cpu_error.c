@@ -2,9 +2,13 @@
 #include "cpu_error.h"
 
 int error_code = 0;
+int err_count = 0;
 
 int set_error(int err) {
+	if (err == err_none)
+		return 0;
 	error_code = err;
+	err_count++;
 	return 1;
 }
 

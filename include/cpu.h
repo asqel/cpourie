@@ -4,39 +4,61 @@
 #include "types.h"
 
 typedef struct {
-	u48 r_do[4];
-	u48 r_re[4];
-	u48 r_mi[4];
-	u48 r_fa[4];
-	u48 r_so[4];
-	u48 r_la[4];
-	u48 r_si[4];
+	u32 r_do;
+	u32 r_do$;
+	u32 r_re;
+	u32 r_re$;
+	u32 r_mi;
+	u32 r_fa;
+	u32 r_fa$;
+	u32 r_so;
+	u32 r_so$;
+	u32 r_la;
+	u32 r_la$;
+	u32 r_si;
+	u32 r_in; // instrument
+	u32 r_ou; // outstrument (what ?)
+	u32 r_sp;
+	u32 r_bp;
 
-	u48 r_pc;
-	u48 r_sp;
-	u48 r_bp;
-	u48 r_status;
+	u32 r_pc;
+	u32 r_status;
+	u8  level; // 0 user, 1 trusted, 2 kernel
 
-	double r_red[6];
-	double r_green[6];
-	double r_blue[6];
-	double r_magenta[6];
-	double r_yellow[6];
-	double r_cyan[6];
-	double r_white[6];
-	double r_black[6];
+	double r_red;
+	double r_green;
+	double r_blue;
+	double r_magenta;
+	double r_yellow;
+	double r_cyan;
+	double r_white;
+	double r_black;
 } registers_t;
+
+/*
+status bits
+
+0: overflow / underflow
+
+*/
 
 
 typedef struct {
 	registers_t r;
 	u8 *memory;
-	u48 mem_size;
+	u32 mem_size;
+	u8 is_halted;
 } cpu_t;
 
-cpu_t *new_cpu(u48 mem_size);
+cpu_t *new_cpu(u32 mem_size);
 void free_cpu(cpu_t *cpu);
+void set_register(cpu_t *cpu, u8 reg, u32 value);
+u32 get_register(cpu_t *cpu, u8 reg);
+i32 get_register_signed(cpu_t *cpu, u8 reg);
+void set_register_signed(cpu_t *cpu, u8 reg, i32 value);
 
 void dump_registers(cpu_t *cpu);
+
+void status_set_carry(cpu_t *cpu);
 
 #endif

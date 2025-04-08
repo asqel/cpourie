@@ -1,0 +1,10 @@
+halt:
+	opcode = 0b10100101 | A5 | 165
+
+	shape:
+		opcode
+
+	description:
+		halt the cpu stopping the execution of any code
+
+

@@ -1,0 +1,5 @@
+mov Ra, Rb:
+
+	move to register Ra the content of register Rb
+
+

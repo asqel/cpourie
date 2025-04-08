@@ -48,29 +48,20 @@
 #define U64 	uint64_t
 #define U0 		void
 
-#define u48 u64
-#define i48 i64
+#define MAX_u32 ((u32)0xFFFFFFFF)
+#define MAX_u16 ((u16)0x0000FFFF)
+#define MAX_u8  ((u16)0x000000FF)
 
-typedef struct {
-	i32 int_part;
-	i32 dec_part;
-} fpoint;
+#define MAX_i32 ((u32)0x7FFFFFFF)
+#define MAX_i16 ((u16)0x00007FFF)
+#define MAX_i8  ((u16)0x0000007F)
 
-#define fpoint_shift (1 << 30)
+#define MIN_i32 ((u32)0xFFFFFFFF)
+#define MIN_i16 ((u16)0x0000FFFF)
+#define MIN_i8  ((u16)0x000000FF)
 
-#define fpoint_to_double(X) (x.int_part + (double)x.dec_part / fpoint_shift)
-
-#define double_to_fpoint(X) ((fpoint){.int_part = (i32)(X), .dec_part = (i32)(fpoint_shift * ((X) - (i32)(X)))})
-
-#define MAX_u48 ((u48)0xFFFFFFFFFFFF)
-#define MAX_u32 ((u32)0x0000FFFFFFFF)
-#define MAX_u16 ((u16)0x00000000FFFF)
-#define MAX_u8  ((u16)0x0000000000FF)
-
-#define SIZEOF_u48 6
 #define SIZEOF_u32 4
 #define SIZEOF_u16 2
 #define SIZEOF_u8  1
-#define SIZEOF_fpoint 8
 
 #endif

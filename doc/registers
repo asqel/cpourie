@@ -1,0 +1,51 @@
+there are 3 types of registers:
+	- the integer ones
+	- the double ones
+	- the special ones
+
+integer registers:
+	there is 7 integer register that can hold each a u32
+	these registers are named:
+		- do
+		- do$
+		- re
+		- re$
+		- mi
+		- fa
+		- fa$
+		- so
+		- so$
+		- la
+		- la$
+		- si
+		- in
+		- ou
+		- sp
+		- bp
+
+double registers:
+	there is 8 double register that can hold each a double
+	they are named:
+		- red
+		- green
+		- blue
+		- magenta
+		- yellow
+		- cyan
+		- white
+		- black
+
+
+special registers:
+	these register are not for general purpose they are mainly use be the cpu and are
+	not always directly accessible they are all u32 registers
+	there is 4 special register
+		- pc     : programme counter (points to the current instruction)
+		- sp     : stack pointer (points to the last element put on the stack)
+		- bp     : base pointer (points to the start of the stack)
+		- status : store status information about the cpu
+
+	pc can only be read and moved to si
+	sp can be modified by any of the integers register
+	bp can be modified by any of the integers register
+	status can only be read or moved from and to la$
