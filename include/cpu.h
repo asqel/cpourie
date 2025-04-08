@@ -25,6 +25,8 @@ typedef struct {
 	u32 r_status;
 	u8  level; // 0 user, 1 trusted, 2 kernel
 
+	uint8_t interrupt;
+
 	double r_red;
 	double r_green;
 	double r_blue;
@@ -35,14 +37,6 @@ typedef struct {
 	double r_black;
 } registers_t;
 
-/*
-status bits
-
-0: overflow / underflow
-
-*/
-
-
 typedef struct {
 	registers_t r;
 	u8 *memory;
@@ -52,13 +46,11 @@ typedef struct {
 
 cpu_t *new_cpu(u32 mem_size);
 void free_cpu(cpu_t *cpu);
-void set_register(cpu_t *cpu, u8 reg, u32 value);
-u32 get_register(cpu_t *cpu, u8 reg);
-i32 get_register_signed(cpu_t *cpu, u8 reg);
-void set_register_signed(cpu_t *cpu, u8 reg, i32 value);
 
 void dump_registers(cpu_t *cpu);
 
-void status_set_carry(cpu_t *cpu);
+#define CPU_INT_BADOPCODE 0x01
+#define CPU_INT_PHYS_MEM 0x02
+
 
 #endif
