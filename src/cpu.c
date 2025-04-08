@@ -80,5 +80,4 @@ void dump_registers(cpu_t *cpu) {
 	printf("  ");
 	print_register_u32_from(cpu->r.r_bp, "bp");
 	printf("\n\n");
-
 }

@@ -3,7 +3,15 @@
 
 #include "types.h"
 
+#define PCI_BASE 0x0ABC
+#define PCI_NUM 32 // pci at index 0 is pci controller
+#define PCI_SPAVE_LEN 4 * 4 // each pci is assign 4 u32
+
+typedef void (*pci_callback_t)(cpu_t *cpu, u8 num, u32 addr);
+
 typedef struct {
+	pci_callback_t pci_callback_t[PCI_NUM];
+
 	u32 r_do;
 	u32 r_do$;
 	u32 r_re;
@@ -49,8 +57,8 @@ void free_cpu(cpu_t *cpu);
 
 void dump_registers(cpu_t *cpu);
 
-#define CPU_INT_BADOPCODE 0x01
-#define CPU_INT_PHYS_MEM 0x02
 
+#define CPU_INT_BADOPCODE 0x01
+#define CPU_INT_OUT_BOUND 0x02
 
 #endif

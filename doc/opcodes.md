@@ -9,12 +9,21 @@
 Integers instructions
 
 ld A,  CONST:T
+	0x01 0000TT11 ...(CONST:T)
 ld A, [CONST]:T
-ld A, [B + CONST]:T
+	0x01 0001TT11 ...(CONST:u32)
 ld A, [PC + B + CONST]:T
+	0x01 TTBBBB01 ...(CONST:u8)
+ld A, [PC + CONST:Y]:T
+	0x01 YYTT0000 ...(CONST:Y)
+ld A, [[PC + CONST:Y]]:T
+	0x01 YYTT1000 ...(CONST:Y)
 ld A, [[PC + B]]:T
-ld A, [PC + CONST]:T
-ld A, [[PC + CONST]]:T
+	0x02 TTBBBB00
+ld A, [B + CONST]:T
+	0x02 BBBBTT11 ...(CONST:u16)
+	0x02 BBBBTT01 ...(CONST:u8)
+	0x02 BBBBTT10 ...(CONST:u32)
 
 st [CONST]:T, A
 st [PC + CONST]:T, A
