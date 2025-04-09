@@ -26,28 +26,51 @@ ld A, [B + CONST]:T
 	0x02 BBBBTT10 ...(CONST:u32)
 
 st [CONST]:T, A
+	0x03 AAAATT00 ...(CONST:u32)
 st [PC + CONST]:T, A
+	0x03 AAAATT01 ...(CONST:u32)
 st [[PC + CONST]]:T, A
+	0x03 AAAATT10 ...(CONST:u32)
 st [B + CONST]:T, A
-st [B + CONST1]:T, CONST2
-st [PC + B + CONST]:T, A
-st [PC + B + CONST1]:T, CONST2
-st [[PC + B]], CONST
-st [[PC + B]], A
+	0x04 11AAAATT BBBB0000 ...(CONST:u32)
+st [B + CONST1:Y]:T, CONST2
+	0x04 10BBBBTT YY000000 ...(CONST2:T) ...(CONST1:Y)
+st [PC + B + CONST:Y]:T, A
+	0x04 10BBBBTT YYAAAA11 ...(CONST:Y)
+st [PC + B + CONST1:Y]:T, CONST2
+	0x04 10BBBBTT YY000010 ...(CONST2:T) ...(CONST1:Y)
+st [[PC + B]]:T, CONST
+	0x04 01BBBBTT ...(CONST:T)
+st [[PC + B]]:T, A
+	0x04 00BBBBTT AAAA0000
 
 mov A, B
+	0x05 AAAABBBB
 mov A, PC
+	0x06 AAAA0001
 mov A, STATUS
+	0x06 AAAA0010
 mov STATUS, A
+	0x06 AAAA0011
 
 add A, B
-
+	0xA0 AAAABBBB
 add A, CONST:T // T == u32 or u16
-add A, [B]:T // T == u32 or u16
-add A, [[B]]:T // T == u32 or u16
+	0xA1 AAAATT00 ...(CONST:T)
+add A, [B]:u32
+	0xA2 AAAABBBB
+add A, [B]:u16
+	0xA3 AAAABBBB
+add A, [B]:u8
+	0xA4 AAAABBBB
+add A, [[B]]:u32
+	0xA5 AAAABBBB
+add A, [[B]]:u16
+	0xA6 AAAABBBB
+add A, [[B]]:u8
+	0xA7 AAAABBBB
 
 sub A, B
-
 sub A, CONST:T // T == u32 or u16
 sub A, [B]:T // T == u32 or u16
 sub A, [[B]]:T // T == u32 or u16
