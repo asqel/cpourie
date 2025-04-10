@@ -8,7 +8,7 @@ cpu_t *new_cpu(u32 mem_size) {
 	cpu_t *cpu = calloc(1, sizeof(cpu_t));
 
 	cpu->mem_size = mem_size;
-	cpu->memory = malloc(sizeof(u8) * cpu->mem_size);\
+	cpu->memory = malloc(sizeof(u8) * cpu->mem_size);
 
 	return cpu;
 }

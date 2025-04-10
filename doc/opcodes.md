@@ -5,57 +5,81 @@
 
 
 
+Used opcode
+
+| low\\high| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F |
+|----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|    0     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    1     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    3     |   |   | X | X |   | X |   | X | X | X | X | X | X |   |   |   |
+|    4     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    5     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    6     |   |   | X |   |   |   |   |   | X | X | X | X | X |   |   |   |
+|    7     |   |   |   |   |   |   |   |   | X | X | X | X | X |   |   |   |
+|    8     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   |   |
+|    9     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   |   |
+|    A     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
+|    B     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
+|    C     |   |   |   |   | X |   | X |   |   |   | X |   |   |   |   |   |
+|    D     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   |   |
+|    E     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+|    F     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+
 ////
 Integers instructions
 
 ld A,  CONST:T
-	0x01 0000TT11 ...(CONST:T)
+	0x6C 0000TT11 ...(CONST:T)
 ld A, [CONST]:T
-	0x01 0001TT11 ...(CONST:u32)
+	0x6C 0001TT11 ...(CONST:u32)
 ld A, [PC + B + CONST]:T
-	0x01 TTBBBB01 ...(CONST:u8)
+	0x6C TTBBBB01 ...(CONST:u8)
 ld A, [PC + CONST:Y]:T
-	0x01 YYTT0000 ...(CONST:Y)
+	0x6C YYTT0000 ...(CONST:Y)
 ld A, [[PC + CONST:Y]]:T
-	0x01 YYTT1000 ...(CONST:Y)
+	0x6C YYTT1000 ...(CONST:Y)
 ld A, [[PC + B]]:T
-	0x02 TTBBBB00
+	0x4C TTBBBB00
 ld A, [B + CONST]:T
-	0x02 BBBBTT11 ...(CONST:u16)
-	0x02 BBBBTT01 ...(CONST:u8)
-	0x02 BBBBTT10 ...(CONST:u32)
+	0x4C BBBBTT11 ...(CONST:u16)
+	0x4C BBBBTT01 ...(CONST:u8)
+	0x4C BBBBTT10 ...(CONST:u32)
+
 
 st [CONST]:T, A
-	0x03 AAAATT00 ...(CONST:u32)
+	0x73 AAAATT00 ...(CONST:u32)
 st [PC + CONST]:T, A
-	0x03 AAAATT01 ...(CONST:u32)
+	0x73 AAAATT01 ...(CONST:u32)
 st [[PC + CONST]]:T, A
-	0x03 AAAATT10 ...(CONST:u32)
+	0x73 AAAATT10 ...(CONST:u32)
 st [B + CONST]:T, A
-	0x04 11AAAATT BBBB0000 ...(CONST:u32)
+	0x53 11AAAATT BBBB0000 ...(CONST:u32)
 st [B + CONST1:Y]:T, CONST2
-	0x04 10BBBBTT YY000000 ...(CONST2:T) ...(CONST1:Y)
+	0x53 10BBBBTT YY000000 ...(CONST2:T) ...(CONST1:Y)
 st [PC + B + CONST:Y]:T, A
-	0x04 10BBBBTT YYAAAA11 ...(CONST:Y)
+	0x53 10BBBBTT YYAAAA11 ...(CONST:Y)
 st [PC + B + CONST1:Y]:T, CONST2
-	0x04 10BBBBTT YY000010 ...(CONST2:T) ...(CONST1:Y)
+	0x53 10BBBBTT YY000010 ...(CONST2:T) ...(CONST1:Y)
 st [[PC + B]]:T, CONST
-	0x04 01BBBBTT ...(CONST:T)
+	0x53 01BBBBTT ...(CONST:T)
 st [[PC + B]]:T, A
-	0x04 00BBBBTT AAAA0000
+	0x53 00BBBBTT AAAA0000
+
 
 mov A, B
-	0x05 AAAABBBB
+	0x6D AAAABBBB
 mov A, PC
-	0x06 AAAA0001
+	0x4D AAAA0001
 mov A, STATUS
-	0x06 AAAA0010
+	0x4D AAAA0010
 mov STATUS, A
-	0x06 AAAA0011
+	0x4D AAAA0011
+
 
 add A, B
 	0xA0 AAAABBBB
-add A, CONST:T // T == u32 or u16
+add A, CONST:T
 	0xA1 AAAATT00 ...(CONST:T)
 add A, [B]:u32
 	0xA2 AAAABBBB
@@ -70,76 +94,134 @@ add A, [[B]]:u16
 add A, [[B]]:u8
 	0xA7 AAAABBBB
 
+
 sub A, B
-sub A, CONST:T // T == u32 or u16
-sub A, [B]:T // T == u32 or u16
-sub A, [[B]]:T // T == u32 or u16
+	0xA8 AAAABBBB
+sub A, CONST:T
+	0xA9 AAAATT00 ...(CONST:T)
+sub A, [B]:u16
+	0xA9 AAAABBBB
+sub A, [B]:u32
+	0xAA AAAABBBB
+sub A, [[B]]:u16
+	0xAB AAAABBBB
+sub A, [[B]]:u32
+	0xAC AAAABBBB
+
 
 Imul A, B
-Imul A, CONST:T // T == i32 or i16
-
+	0xB0 AAAABBBB
+Imul A, CONST:T
+	0xB1 AAAATT00 ...(CONST:T)
 Umul A, B
-Umul A, CONST:T // T == u32 or u16
+	0xB2 AAAABBBB
+Umul A, CONST:T
+	0xB3 AAAATT00 ...(CONST:T)
 
 
 Idiv A, B
+	0xB4 AAAABBBB
 Udiv A, B
+	0xB5 AAAABBBB
 
 Imod A, B
+	0xB6 AAAABBBB
 Umod A, B
+	0xB7 AAAABBBB
+
 
 // bitwise
 Band A, B
-Band A, CONST:u32
+	0x20 AAAABBBB
+Band A, CONST:T
+	0x21 AAAATT00 ...(CONST:T)
 Bor A, B
-Bor A, CONST:u32
+	0x22 AAAABBBB
+Bor A, CONST:T
+	0x23 AAAATT00 ...(CONST:T)
 Bnot A
+	0x24 AAAA0000
 Bxor A, B
-Bxor A, CONST:u32
+	0x25 AAAABBBB
+Bxor A, CONST:T
+	0x26 AAAATT00 ...(CONST:T)
 
-//logical
+// Logical
 Land A, B
-Land A, CONST:u32
+	0x30 AAAABBBB
 Lor A, B
-Lor A, CONST:u32
+	0x31 AAAABBBB
 Lnot A
+	0x32 AAAA0000
 Lxor A, B
-Lxor A, CONST:u32
+	0x33 AAAABBBB
 
-Ilshift A, B
-Ilshift A, CONST:u32
+
 Ulshift A, B
-Ulshift A, CONST:u32
+	0x34 AAAABBBB
+Ulshift A, CONST:u8
+	0x35 AAAA0000 CONST
 
 cmp A, B
-cmp A, CONST:u32
-cmp A, [B]
-cmp [B], [B]
+	0xC0 AAAABBBB
+cmp A, CONST:uT
+	0xC1 AAAATT00 ...(CONST:T)
+cmp A:u8, [B]:u8
+	0xC2 AAAABBBB
+cmp A:u16, [B]:u16
+	0xC3 AAAABBBB
+cmp A:u32, [B]:u32
+	0xC4 AAAABBBB
+cmp [A]:u8, [B]:u8
+	0xC5 AAAABBBB
+cmp [A]:u16, [B]:u16
+	0xC6 AAAABBBB
+cmp [A]:u32, [B]:u32
+	0xC7 AAAABBBB
+
+// check modulo set flag of modulo if A % B != 0
+cmod A, B
+	0xC8 AAAABBBB
+cmod A, CONST:T
+	0xC9 AAAATT00 ...(CONST:T)
 
 
 // A:regeister/constant
 // MOD: Uless, Ugreater, equal, Iless, Igreater,
 //		Uless_eq, Ugreater_eq, Iless_eq, Igreater_eqy
-//		always true
-jmp_MOD A
-jmp_MOD [A]
-jmp_MOD PC + A
-jmp_MOD PC + [A]
-Jmp_MOD A + [A]
-jmp_MOD PC + [PC + A]
+//		true, mod0 (modulo flag == 0), mod1
 
-call_MOD A
-call_MOD [A]
-call_MOD PC + A
-call_MOD PC + [A]
-call_MOD A + [A]
-call_MOD PC + [PC + A]
+jmp_M A
+	0x80 MMMMAAAA
+jmp_M CONST
+	0x81 MMMM0000 ...(CONST:u32)
+jmp_M [A]
+	0x82 MMMMAAAA
+jmp_M PC + A
+	0x83 MMMMAAAA
+jmp_M PC + [A]
+	0x84 MMMMAAAA
+jmp_M PC + [PC + A]
+	0x85 MMMMAAAAA
+jmp_M PC + [PC + CONST:T]
+	0x86 MMMMTT00 ...(CONST:T)
+jmp_M PC + CONST:T
+	0x87 MMMMTT00  ...(CONST:T)
 
 
-halt
-
-
-// integer and float
-
-movh A, B	// move higher half of float in B into A
-movl A, B	// move lower half of float in B into A
+call_M A
+	0x90 MMMMAAAA
+call_M CONST
+	0x91 MMMM0000 ...(CONST:u32)
+call_M [A]
+	0x92 MMMMAAAA
+call_M PC + A
+	0x93 MMMMAAAA
+call_M PC + [A]
+	0x94 MMMMAAAA
+call_M PC + [PC + A]
+	0x95 MMMMAAAAA
+call_M PC + [PC + CONST:T]
+	0x96 MMMMTT00 ...(CONST:T)
+call_M PC + CONST:T
+	0x97 MMMMTT00  ...(CONST:T)
