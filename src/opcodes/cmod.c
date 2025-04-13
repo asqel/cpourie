@@ -4,8 +4,8 @@ void handler_c8_cmod(cpu_t *cpu) {
 	if (!can_acces_u8(cpu, cpu->r.r_pc + 1))
 		return set_interrupt(cpu, CPU_INT_BADOPCODE);
 	u8 info = get_u8(cpu, cpu->r.r_pc + 1);
-	u32 A = get_Uregister_ptr(cpu, info >> 4);
-	u32 B = get_Uregister_ptr(cpu, info & 0b1111);
+	u32 A = *get_Uregister_ptr(cpu, info >> 4);
+	u32 B = *get_Uregister_ptr(cpu, info & 0b1111);
 	if (B == 0)
 		return set_interrupt(cpu, CPU_INT_MOD_ZERO);
 	update_status_mod(cpu, A, B);

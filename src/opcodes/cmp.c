@@ -5,7 +5,7 @@ void handler_c0_cmp(cpu_t *cpu) {
 		return set_interrupt(cpu, CPU_INT_BADOPCODE);
 
 	u8 info = get_u8(cpu, cpu->r.r_pc + 1);
-	update_status_comp(cpu, get_Uregister_ptr(cpu, info >> 4), get_Uregister_ptr(cpu, info & 0b1111));
+	update_status_comp(cpu, *get_Uregister_ptr(cpu, info >> 4), *get_Uregister_ptr(cpu, info & 0b1111));
 	cpu->r.r_pc += 2;
 }
 
