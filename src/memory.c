@@ -39,6 +39,20 @@ u32 get_u_with_size(cpu_t *cpu, u32 addr, u8 size) {
 	exit(1);
 }
 
+i32 get_i_with_size(cpu_t *cpu, u32 addr, u8 size) {
+	switch (size) {
+		case 0b00:
+			return cpu->memory[addr];
+		case 0b01:
+			return *(u16 *)&cpu->memory[addr];
+		case 0b10:
+			return *(u32 *)&cpu->memory[addr];
+		default:
+			break;
+	}
+	fprintf(stderr, "Invalid size in get_u_with_size\n");
+	exit(1);
+}
 int can_acces_u_with_size(cpu_t *cpu, u32 addr, u8 size) {
 	switch (size) {
 		case 0b00:
@@ -53,3 +67,31 @@ int can_acces_u_with_size(cpu_t *cpu, u32 addr, u8 size) {
 	fprintf(stderr, "Invalid size in can_acces_u_with_size\n");
 	exit(1);
 }
+
+void set_u_with_size(cpu_t *cpu, u32 addr, u8 size, u32 val) {
+	switch (size) {
+		case 0b00:
+			return set_u8(cpu, addr, val);
+		case 0b01:
+			return set_u16(cpu, addr, val);
+		case 0b10:
+			return set_u32(cpu, addr, val);
+		default:
+			break;
+	}
+	fprintf(stderr, "Invalid size in get_u_with_size\n");
+	exit(1);
+}
+
+void set_u32(cpu_t *cpu, u32 addr, u32 val) {
+	*((u32 *)&cpu->memory[addr]) = val;
+}
+
+void set_u16(cpu_t *cpu, u32 addr, u16 val) {
+	*((u16 *)&cpu->memory[addr]) = val;
+}
+
+void set_u8(cpu_t *cpu, u32 addr, u8 val) {
+	*((u8 *)&cpu->memory[addr]) = val;
+}
+

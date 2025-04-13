@@ -20,12 +20,10 @@ void free_cpu(cpu_t *cpu) {
 
 static void print_u32(u32 x) {
 	char *digits = "0123456789ABCDEF";
-	u8 *num = (u8 *)(&x);
-	u32 col1 = x & 0xFFFFFF;
-	u32 col2 = (x & 0xFFFFFF000000) >> 24;
-	for (int i = 5; i >= 0; i--) {
-		printf("%c%c", digits[(num[i] >> 4) & 0xf], digits[num[i] & 0xf]);
-	}
+	printf("%c%c", digits[((x >> 24) >> 4) & 0xf], digits[(x >> 24) & 0xf]);
+	printf("%c%c", digits[((x >> 16) >> 4) & 0xf], digits[(x >> 16) & 0xf]);
+	printf("%c%c", digits[((x >> 8) >> 4) & 0xf], digits[(x >> 8) & 0xf]);
+	printf("%c%c", digits[((x >> 0) >> 4) & 0xf], digits[(x >> 0) & 0xf]);
 }
 
 static void print_register_u32_from(u32 reg, char *name) {
@@ -80,4 +78,34 @@ void dump_registers(cpu_t *cpu) {
 	printf("  ");
 	print_register_u32_from(cpu->r.r_bp, "bp");
 	printf("\n\n");
+}
+
+void set_interrupt(cpu_t *cpu, u8 interrupt) {
+	cpu->r.interrupt = interrupt;
+}
+
+u32 *get_Uregister_ptr(cpu_t *cpu, u8 reg) {
+	switch (reg) {
+		case 0:  return &cpu->r.r_do;
+		case 2:  return &cpu->r.r_do$;
+		case 3:  return &cpu->r.r_re;
+		case 4:  return &cpu->r.r_re$;
+		case 5:  return &cpu->r.r_mi;
+		case 6:  return &cpu->r.r_fa;
+		case 7:  return &cpu->r.r_fa$;
+		case 8:  return &cpu->r.r_so;
+		case 9:  return &cpu->r.r_so$;
+		case 10: return &cpu->r.r_la;
+		case 11: return &cpu->r.r_la$;
+		case 12: return &cpu->r.r_si;
+		case 13: return &cpu->r.r_in;
+		case 14: return &cpu->r.r_ou;
+		case 15: return &cpu->r.r_sp;
+		case 16: return &cpu->r.r_bp;
+		default: return NULL;
+	}
+}
+
+i32 *get_Iregister_ptr(cpu_t *cpu, u8 reg) {
+	return (i32 *)get_Uregister_ptr(cpu, reg);
 }

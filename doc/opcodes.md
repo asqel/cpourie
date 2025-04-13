@@ -9,42 +9,47 @@ Used opcode
 
 | low\\high| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F |
 |----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|    0     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    0     |   |   | X | X |   |   | X |   | X | X | X | X | X | X |   |   |
 |    1     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
-|    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
+|    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   | X |   |
 |    3     |   |   | X | X |   | X |   | X | X | X | X | X | X |   |   |   |
 |    4     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
-|    5     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
-|    6     |   |   | X |   |   |   |   |   | X | X | X | X | X |   |   |   |
-|    7     |   |   |   |   |   |   |   |   | X | X | X | X | X |   |   |   |
-|    8     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   |   |
+|    5     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   |   |
+|    6     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   |   |
+|    7     |   |   |   | X |   |   |   |   | X | X |   | X | X |   |   |   |
+|    8     |   |   |   |   |   |   |   |   | X | X | X |   | X |   | X |   |
 |    9     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   |   |
 |    A     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
-|    B     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
-|    C     |   |   |   |   | X |   | X |   |   |   | X |   |   |   |   |   |
+|    B     |   |   |   |   |   |   | X |   |   |   | X |   |   |   |   |   |
+|    C     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   |   |
 |    D     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   |   |
 |    E     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 |    F     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
 
+type T
+	00 : u8
+	01 : u16
+	10 : u32
+	11 : INVALIDE
+
 ////
 Integers instructions
 
+
 ld A,  CONST:T
-	0x6C 0000TT11 ...(CONST:T)
+	0x6C AAAATT11 ...(CONST:T)
 ld A, [CONST]:T
-	0x6C 0001TT11 ...(CONST:u32)
-ld A, [PC + B + CONST]:T
-	0x6C TTBBBB01 ...(CONST:u8)
+	0x6C AAAATT10 ...(CONST:u32)
 ld A, [PC + CONST:Y]:T
-	0x6C YYTT0000 ...(CONST:Y)
+	0x6A YYTTAAAA ...(CONST:Y)
 ld A, [[PC + CONST:Y]]:T
-	0x6C YYTT1000 ...(CONST:Y)
+	0x60 YYTTAAAA ...(CONST:Y)
+ld A, [PC + B + CONST:Y]:T
+	0x6B BBBBAAAA TTYY0000 ...(CONST:T)
 ld A, [[PC + B]]:T
-	0x4C TTBBBB00
-ld A, [B + CONST]:T
-	0x4C BBBBTT11 ...(CONST:u16)
-	0x4C BBBBTT01 ...(CONST:u8)
-	0x4C BBBBTT10 ...(CONST:u32)
+	0x6B BBBBAAAA TT000001
+ld A, [B]:T
+	0x4C BBBBTT00 AAAA0000
 
 
 st [CONST]:T, A
@@ -87,25 +92,16 @@ add A, [B]:u16
 	0xA3 AAAABBBB
 add A, [B]:u8
 	0xA4 AAAABBBB
-add A, [[B]]:u32
-	0xA5 AAAABBBB
-add A, [[B]]:u16
-	0xA6 AAAABBBB
-add A, [[B]]:u8
-	0xA7 AAAABBBB
-
 
 sub A, B
 	0xA8 AAAABBBB
 sub A, CONST:T
 	0xA9 AAAATT00 ...(CONST:T)
-sub A, [B]:u16
-	0xA9 AAAABBBB
 sub A, [B]:u32
 	0xAA AAAABBBB
-sub A, [[B]]:u16
+sub A, [B]:u16
 	0xAB AAAABBBB
-sub A, [[B]]:u32
+sub A, [B]:u8
 	0xAC AAAABBBB
 
 
@@ -162,10 +158,17 @@ Ulshift A, B
 Ulshift A, CONST:u8
 	0x35 AAAA0000 CONST
 
+Urshift A, B
+	0x36 AAAABBBB
+Urshift A, CONST:u8
+	0x37 AAAA0000 CONST
+
 cmp A, B
 	0xC0 AAAABBBB
-cmp A, CONST:uT
+cmp A, CONST:T
 	0xC1 AAAATT00 ...(CONST:T)
+cmp [A], CONST:T
+	0xC1 AAAATT11 ...(CONST:T)
 cmp A:u8, [B]:u8
 	0xC2 AAAABBBB
 cmp A:u16, [B]:u16
@@ -182,13 +185,13 @@ cmp [A]:u32, [B]:u32
 // check modulo set flag of modulo if A % B != 0
 cmod A, B
 	0xC8 AAAABBBB
-cmod A, CONST:T
+cmod A:u32, CONST:T
 	0xC9 AAAATT00 ...(CONST:T)
 
 
 // A:regeister/constant
 // MOD: Uless, Ugreater, equal, Iless, Igreater,
-//		Uless_eq, Ugreater_eq, Iless_eq, Igreater_eqy
+//		Uless_eq, Ugreater_eq, Iless_eq, Igreater_eq
 //		true, mod0 (modulo flag == 0), mod1
 
 jmp_M A
@@ -207,6 +210,8 @@ jmp_M PC + [PC + CONST:T]
 	0x86 MMMMTT00 ...(CONST:T)
 jmp_M PC + CONST:T
 	0x87 MMMMTT00  ...(CONST:T)
+jmp_M [PC + A]
+	0x88 MMMMAAAA
 
 
 call_M A
@@ -225,3 +230,20 @@ call_M PC + [PC + CONST:T]
 	0x96 MMMMTT00 ...(CONST:T)
 call_M PC + CONST:T
 	0x97 MMMMTT00  ...(CONST:T)
+call_M [PC + A]
+	0x98 MMMMAAAA
+
+push A:T
+	0xE2 AAAATT00
+push CONST:T
+	0xE2 0000TT11 ...(CONST:T)
+push [A]
+	0xE2 AAAATT10
+push [PC + CONST:Y]:TT
+	0xE2 00YYTT01 ...(CONST:Y)
+pop A:T
+	0xE8 AAAATT00
+
+swap A, B
+	0xD0 AAAABBBB
+
