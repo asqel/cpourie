@@ -67,9 +67,29 @@ void init_opcodes() {
 	opcodes_funcs[0xc5] = &handler_c5_cmp;
 	opcodes_funcs[0xc6] = &handler_c6_cmp;
 	opcodes_funcs[0xc7] = &handler_c7_cmp;
-
 	opcodes_funcs[0xc8] = &handler_c8_cmod;
 	opcodes_funcs[0xc9] = &handler_c9_cmod;
+	opcodes_funcs[0x80] = &handler_80_jmp;
+	opcodes_funcs[0x81] = &handler_81_jmp;
+	opcodes_funcs[0x82] = &handler_82_jmp;
+	opcodes_funcs[0x83] = &handler_83_jmp;
+	opcodes_funcs[0x84] = &handler_84_jmp;
+	opcodes_funcs[0x85] = &handler_85_jmp;
+	opcodes_funcs[0x86] = &handler_86_jmp;
+	opcodes_funcs[0x87] = &handler_87_jmp;
+	opcodes_funcs[0x88] = &handler_83_jmp;
+	opcodes_funcs[0x90] = &handler_90_call;
+	opcodes_funcs[0x91] = &handler_91_call;
+	opcodes_funcs[0x92] = &handler_92_call;
+	opcodes_funcs[0x93] = &handler_93_call;
+	opcodes_funcs[0x94] = &handler_94_call;
+	opcodes_funcs[0x95] = &handler_95_call;
+	opcodes_funcs[0x96] = &handler_96_call;
+	opcodes_funcs[0x97] = &handler_97_call;
+	opcodes_funcs[0x98] = &handler_93_call;
+	opcodes_funcs[0xe2] = &handler_e2_push;
+	opcodes_funcs[0xe8] = &handler_e8_pop;
+	opcodes_funcs[0xd0] = &handler_d0_swap;
 }
 
 

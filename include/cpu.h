@@ -114,9 +114,30 @@ void update_status_comp(cpu_t *cpu, u32 a, u32 b);
 void update_status_mod(cpu_t *cpu, u32 a, u32 b); // it doesn't check if b == 0
 
 
+int cpu_push_u32(cpu_t *cpu, u32 val);
+int cpu_push_u16(cpu_t *cpu, u16 val);
+int cpu_push_u8(cpu_t *cpu, u8 val);
+int cpu_push_u_with_size(cpu_t *cpu, u32 val, u8 type);
+
+int cpu_do_jump(cpu_t *cpu, u32 addr, u8 cond);
+int cpu_do_call(cpu_t *cpu, u32 addr, u8 cond, u32 ret_addr);
+
 #define CPU_INT_BADOPCODE 0x01
 #define CPU_INT_OUT_BOUND 0x02
 #define CPU_INT_DIV_ZERO 0x03
 #define CPU_INT_MOD_ZERO 0x04
+
+#define CPU_COND_Uless 0x0
+#define CPU_COND_Ugreater 0x1
+#define CPU_COND_equal 0x2
+#define CPU_COND_Iless 0x3
+#define CPU_COND_Igreater 0x4
+#define CPU_COND_Uless_eq 0x5
+#define CPU_COND_Ugreater_eq 0x6
+#define CPU_COND_Iless_eq 0x7
+#define CPU_COND_Igreater_eq 0x8
+#define CPU_COND_True 0x9
+#define CPU_COND_mod0 0xA
+#define CPU_COND_mod1 0xB
 
 #endif

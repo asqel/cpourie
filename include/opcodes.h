@@ -70,4 +70,29 @@ void handler_c7_cmp(cpu_t *cpu);
 void handler_c8_cmod(cpu_t *cpu);
 void handler_c9_cmod(cpu_t *cpu);
 
+void handler_80_jmp(cpu_t *cpu);
+void handler_81_jmp(cpu_t *cpu);
+void handler_82_jmp(cpu_t *cpu);
+void handler_83_jmp(cpu_t *cpu);
+void handler_84_jmp(cpu_t *cpu);
+void handler_85_jmp(cpu_t *cpu);
+void handler_86_jmp(cpu_t *cpu);
+void handler_87_jmp(cpu_t *cpu);
+void handler_88_jmp(cpu_t *cpu);
+
+void handler_90_call(cpu_t *cpu);
+void handler_91_call(cpu_t *cpu);
+void handler_92_call(cpu_t *cpu);
+void handler_93_call(cpu_t *cpu);
+void handler_94_call(cpu_t *cpu);
+void handler_95_call(cpu_t *cpu);
+void handler_96_call(cpu_t *cpu);
+void handler_97_call(cpu_t *cpu);
+void handler_98_call(cpu_t *cpu);
+
+void handler_e2_push(cpu_t *cpu);
+void handler_e8_pop(cpu_t *cpu);
+
+void handler_d0_swap(cpu_t *cpu);
+
 #endif

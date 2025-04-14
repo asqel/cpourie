@@ -204,13 +204,13 @@ jmp_M PC + A
 	0x83 MMMMAAAA
 jmp_M PC + [A]
 	0x84 MMMMAAAA
-jmp_M PC + [PC + A]
+jmp_M PC + [PC + A]:u32
 	0x85 MMMMAAAAA
-jmp_M PC + [PC + CONST:T]
+jmp_M PC + [PC + CONST:T]:u32
 	0x86 MMMMTT00 ...(CONST:T)
 jmp_M PC + CONST:T
 	0x87 MMMMTT00  ...(CONST:T)
-jmp_M [PC + A]
+jmp_M [PC + A]:u32
 	0x88 MMMMAAAA
 
 
@@ -237,12 +237,13 @@ push A:T
 	0xE2 AAAATT00
 push CONST:T
 	0xE2 0000TT11 ...(CONST:T)
-push [A]
+push [A]:T
 	0xE2 AAAATT10
-push [PC + CONST:Y]:TT
-	0xE2 00YYTT01 ...(CONST:Y)
+
 pop A:T
 	0xE8 AAAATT00
+pop [A]:T
+	0xE8 AAAATT11
 
 swap A, B
 	0xD0 AAAABBBB
