@@ -1,15 +1,105 @@
 #include "cpu.h"
 
 int can_acces_u8(cpu_t *cpu, u32 addr) {
-	return addr < cpu->mem_size;
+	if (addr >= cpu->mem_size)
+		return 0;
+	if (cpu->r.level == CPU_LV_K)
+		return addr < cpu->mem_size;
+	if (cpu->r.level == CPU_LV_D || cpu->r.level == CPU_LV_U) {
+		u32 umem = cpu->r.umem;
+		while (umem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr < end)
+				return (1);
+			umem += 8;
+		}
+	}
+	if (cpu->r.level == CPU_LV_D) {
+		u32 dmem = cpu->r.dmem;
+		while (dmem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr < end)
+				return (1);
+			dmem += 8;
+		}
+		if (PCI_BASE <= addr && addr < PCI_MAX_ADDR)
+			return (1);
+	}
+	return (0);
 }
 
 int can_acces_u16(cpu_t *cpu, u32 addr) {
-	return addr + 1 < cpu->mem_size && addr < cpu->mem_size;
+	if (addr >= cpu->mem_size)
+		return 0;
+	if (cpu->r.level == CPU_LV_K)
+		return addr + 1 < cpu->mem_size;
+	if (cpu->r.level == CPU_LV_D || cpu->r.level == CPU_LV_U) {
+		u32 umem = cpu->r.umem;
+		while (umem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr + 1 < end)
+				return (1);
+			umem += 8;
+		}
+	}
+	if (cpu->r.level == CPU_LV_D) {
+		u32 dmem = cpu->r.dmem;
+		while (dmem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr + 1 < end)
+				return (1);
+			dmem += 8;
+		}
+		if (PCI_BASE <= addr && addr + 1 < PCI_MAX_ADDR)
+			return (1);
+	}
+	return (0);
 }
 
 int can_acces_u32(cpu_t *cpu, u32 addr) {
-	return addr + 3 < cpu->mem_size && addr < cpu->mem_size;
+	if (addr >= cpu->mem_size)
+		return 0;
+	if (cpu->r.level == CPU_LV_K)
+		return addr + 3 < cpu->mem_size;
+	if (cpu->r.level == CPU_LV_D || cpu->r.level == CPU_LV_U) {
+		u32 umem = cpu->r.umem;
+		while (umem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr + 3 < end)
+				return (1);
+			umem += 8;
+		}
+	}
+	if (cpu->r.level == CPU_LV_D) {
+		u32 dmem = cpu->r.dmem;
+		while (dmem + 8 < cpu->mem_size) {
+			u32 start = *(u32 *)&cpu->memory[start];
+			u32 end = *(u32 *)&cpu->memory[start + 4];
+			if (start >= end)
+				break;
+			if (start <= addr && addr + 3 < end)
+				return (1);
+			dmem += 8;
+		}
+		if (PCI_BASE <= addr && addr + 3 < PCI_MAX_ADDR)
+			return (1);
+	}
+	return (0);
 }
 
 u32 get_u8(cpu_t *cpu, u32 addr) {

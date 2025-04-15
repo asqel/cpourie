@@ -37,3 +37,18 @@ int cpu_push_u_with_size(cpu_t *cpu, u32 val, u8 type) {
 	printf("Error cpu wrong size in cpu_push_with_size\n");
 	exit(1);
 }
+
+int cpu_push_level(cpu_t *cpu) {
+	if (cpu->r.level_bp - cpu->r.level_sp >= cpu->r.level_stack_len)
+		return -1;
+	cpu->r.level_sp--;
+	cpu->memory[cpu->r.level_sp] = cpu->r.level;
+	return 0;
+}
+
+int cpu_pop_level(cpu_t *cpu) {
+	if (cpu->r.level_sp >= cpu->r.level_bp)
+		return (-1);
+	cpu->r.level_sp++;
+	return cpu->memory[cpu->r.level_sp - 1] = cpu->r.level;
+}

@@ -79,6 +79,7 @@ void handler_85_jmp(cpu_t *cpu);
 void handler_86_jmp(cpu_t *cpu);
 void handler_87_jmp(cpu_t *cpu);
 void handler_88_jmp(cpu_t *cpu);
+void handler_89_jmp(cpu_t *cpu);
 
 void handler_90_call(cpu_t *cpu);
 void handler_91_call(cpu_t *cpu);
@@ -89,10 +90,28 @@ void handler_95_call(cpu_t *cpu);
 void handler_96_call(cpu_t *cpu);
 void handler_97_call(cpu_t *cpu);
 void handler_98_call(cpu_t *cpu);
+void handler_99_call(cpu_t *cpu);
 
 void handler_e2_push(cpu_t *cpu);
 void handler_e8_pop(cpu_t *cpu);
 
 void handler_d0_swap(cpu_t *cpu);
+
+void handler_8f_ret(cpu_t *cpu);
+void handler_f0_setsdt(cpu_t *cpu);
+void handler_f1_setddt(cpu_t *cpu);
+void handler_f2_syscall(cpu_t *cpu);
+void handler_f3_drivcall(cpu_t *cpu);
+void handler_f4_sret(cpu_t *cpu);
+void handler_f4_dret(cpu_t *cpu);
+
+void handler_f6_set_umem(cpu_t *cpu);
+void handler_f7_set_umem(cpu_t *cpu);
+void handler_f8_set_lvl_sp(cpu_t *cpu);
+void handler_f9_set_lvl_bp(cpu_t *cpu);
+void handler_fa_set_lvl_stack_len(cpu_t *cpu);
+void handler_fb_read_lvl_sp(cpu_t *cpu);
+void handler_fb_read_lvl_bp(cpu_t *cpu);
+void handler_fb_read_lvl_stack_len(cpu_t *cpu);
 
 #endif

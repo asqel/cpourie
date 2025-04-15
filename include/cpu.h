@@ -5,7 +5,8 @@
 
 #define PCI_BASE 0x0ABC
 #define PCI_NUM 32 // pci at index 0 is pci controller
-#define PCI_SPAVE_LEN 4 * 4 // each pci is assign 4 u32
+#define PCI_SPACE_LEN 4 * 4 // each pci is assign 4 u32
+#define PCI_MAX_ADDR ((PCI_BASE) + (PCI_NUM) * (PCI_SPACE_LEN))
 
 struct cpu_t;
 struct cpu_pci_t;
@@ -40,11 +41,19 @@ typedef struct {
 
 	u32 r_pc;
 	u32 r_status;
-	u8  level; // 0 user, 1 trusted, 2 kernel
+	u8  level; // 0 kernel
+	u32 sdt[256]; // syscall
+	u32 ddt[256]; // driver call
+	u32 umem; // ptr to user accecible memories list of pairs of u32 [start, end] start <= X < end
+	u32 dmem; // same but for driver (driver also have acces to umem)
 
 	u8 interrupt;
 	u32 int_info1;
 	u32 int_info2;
+
+	u32 level_sp;
+	u32 level_bp;
+	u32 level_stack_len;
 
 	double r_red;
 	double r_green;
@@ -122,10 +131,15 @@ int cpu_push_u_with_size(cpu_t *cpu, u32 val, u8 type);
 int cpu_do_jump(cpu_t *cpu, u32 addr, u8 cond);
 int cpu_do_call(cpu_t *cpu, u32 addr, u8 cond, u32 ret_addr);
 
+
+int cpu_push_level(cpu_t *cpu);
+int cpu_pop_level(cpu_t *cpu);
+
 #define CPU_INT_BADOPCODE 0x01
 #define CPU_INT_OUT_BOUND 0x02
 #define CPU_INT_DIV_ZERO 0x03
 #define CPU_INT_MOD_ZERO 0x04
+#define CPU_INT_PRIVILEGE 0x05
 
 #define CPU_COND_Uless 0x0
 #define CPU_COND_Ugreater 0x1
@@ -139,5 +153,9 @@ int cpu_do_call(cpu_t *cpu, u32 addr, u8 cond, u32 ret_addr);
 #define CPU_COND_True 0x9
 #define CPU_COND_mod0 0xA
 #define CPU_COND_mod1 0xB
+
+#define CPU_LV_K 0 // kernel mode
+#define CPU_LV_D 1 // driver mode
+#define CPU_LV_U 2 // user mode
 
 #endif

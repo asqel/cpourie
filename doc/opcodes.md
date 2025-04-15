@@ -9,22 +9,22 @@ Used opcode
 
 | low\\high| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F |
 |----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|    0     |   |   | X | X |   |   | X |   | X | X | X | X | X | X |   |   |
-|    1     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
-|    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   | X |   |
-|    3     |   |   | X | X |   | X |   | X | X | X | X | X | X |   |   |   |
-|    4     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   |   |
-|    5     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   |   |
-|    6     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   |   |
-|    7     |   |   |   | X |   |   |   |   | X | X |   | X | X |   |   |   |
-|    8     |   |   |   |   |   |   |   |   | X | X | X |   | X |   | X |   |
-|    9     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   |   |
-|    A     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   |   |
-|    B     |   |   |   |   |   |   | X |   |   |   | X |   |   |   |   |   |
-|    C     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   |   |
-|    D     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   |   |
+|    0     |   |   | X | X |   |   | X |   | X | X | X | X | X | X |   | X |
+|    1     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   | X |
+|    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   | X | X |
+|    3     |   |   | X | X |   | X |   | X | X | X | X | X | X |   |   | X |
+|    4     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   | X |
+|    5     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   | X |
+|    6     |   |   | X | X |   |   |   |   | X | X |   | X | X |   |   | X |
+|    7     |   |   |   | X |   |   |   |   | X | X |   | X | X |   |   | X |
+|    8     |   |   |   |   |   |   |   |   | X | X | X |   | X |   | X | X |
+|    9     |   |   |   |   |   |   |   |   |   |   | X |   | X |   |   | X |
+|    A     |   |   |   |   |   |   |   |   |   |   | X |   |   |   |   | X |
+|    B     |   |   |   |   |   |   | X |   |   |   | X |   |   |   |   | X |
+|    C     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   | X |
+|    D     |   |   |   |   | X |   | X |   |   |   |   |   |   |   |   | X |
 |    E     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
-|    F     |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
+|    F     |   |   |   |   |   |   |   |   | X |   |   |   |   |   |   |   |
 
 type T
 	00 : u8
@@ -212,7 +212,8 @@ jmp_M PC + CONST:T
 	0x87 MMMMTT00  ...(CONST:T)
 jmp_M [PC + A]:u32
 	0x88 MMMMAAAA
-
+jmp_M [PC + CONST:T]
+	0x89 MMMMTT00  ...(CONST:T)
 
 call_M A
 	0x90 MMMMAAAA
@@ -232,6 +233,8 @@ call_M PC + CONST:T
 	0x97 MMMMTT00  ...(CONST:T)
 call_M [PC + A]
 	0x98 MMMMAAAA
+call_M [PC + CONST:T]
+	0x99 MMMMTT00  ...(CONST:T)
 
 push A:T
 	0xE2 AAAATT00
@@ -248,3 +251,59 @@ pop [A]:T
 swap A, B
 	0xD0 AAAABBBB
 
+ret
+	8F
+
+set_sdt A, B
+	0xF0 AAAABBBB
+	// set sdt entry contained in A to the address contained in B (only kernel mod)
+
+set_ddt A, B
+	0xF1 AAAABBBB
+	// set ddt entry contained in A to the address contained in B (only kernel mod or driver mod)
+
+syscall X
+	0xF2 XXXXXXXX
+	call the sdt entry 0bXXXXXXXX and switch to kernel mode
+
+drivcall X
+	0xF3 XXXXXXXX
+	call the sdt entry 0bXXXXXXXX and switch to driver mode
+
+sret
+	0xF4
+	return from syscall (only in kernel mod)
+
+dret
+	0xF5
+	return from drivcall (only in driver mod)
+
+set_umem
+	0xF6
+	set umem from register si (only in kernel mod)
+
+set_dmem
+	0xF7
+	set dmem from register si (only in kernel mod)
+
+set_lvl_sp:
+	0xF8
+	set lvl_sp from register si (only kernel mod)
+
+set_lvl_bp:
+	0xF9
+	set lvl_bp from register si (only kernel mod)
+
+set_lvl_len:
+	0xFA
+	set lvl_len from register si (only kernel mod)
+
+read_lvl_sp:
+	0xFB
+	read to si the level stack pointer (only in kernel mod)
+
+read_lvl_bp:
+	0xFC
+
+read_lvl_stack_len:
+	0xFD

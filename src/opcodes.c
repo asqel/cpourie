@@ -77,7 +77,8 @@ void init_opcodes() {
 	opcodes_funcs[0x85] = &handler_85_jmp;
 	opcodes_funcs[0x86] = &handler_86_jmp;
 	opcodes_funcs[0x87] = &handler_87_jmp;
-	opcodes_funcs[0x88] = &handler_83_jmp;
+	opcodes_funcs[0x88] = &handler_88_jmp;
+	opcodes_funcs[0x89] = &handler_89_jmp;
 	opcodes_funcs[0x90] = &handler_90_call;
 	opcodes_funcs[0x91] = &handler_91_call;
 	opcodes_funcs[0x92] = &handler_92_call;
@@ -86,10 +87,26 @@ void init_opcodes() {
 	opcodes_funcs[0x95] = &handler_95_call;
 	opcodes_funcs[0x96] = &handler_96_call;
 	opcodes_funcs[0x97] = &handler_97_call;
-	opcodes_funcs[0x98] = &handler_93_call;
+	opcodes_funcs[0x98] = &handler_98_call;
+	opcodes_funcs[0x99] = &handler_99_call;
 	opcodes_funcs[0xe2] = &handler_e2_push;
 	opcodes_funcs[0xe8] = &handler_e8_pop;
 	opcodes_funcs[0xd0] = &handler_d0_swap;
+	opcodes_funcs[0x8f] = &handler_8f_ret;
+	opcodes_funcs[0xf0] = &handler_f0_setsdt;
+	opcodes_funcs[0xf1] = &handler_f1_setddt;
+	opcodes_funcs[0xf2] = &handler_f2_syscall;
+	opcodes_funcs[0xf3] = &handler_f3_drivcall;
+	opcodes_funcs[0xf4] = &handler_f4_sret;
+	opcodes_funcs[0xf4] = &handler_f4_dret;
+	opcodes_funcs[0xf6] = &handler_f6_set_umem;
+	opcodes_funcs[0xf7] = &handler_f7_set_umem;
+	opcodes_funcs[0xf8] = &handler_f8_set_lvl_sp;
+	opcodes_funcs[0xf9] = &handler_f9_set_lvl_bp;
+	opcodes_funcs[0xfa] = &handler_fa_set_lvl_stack_len;
+	opcodes_funcs[0xfb] = &handler_fb_read_lvl_sp;
+	opcodes_funcs[0xfb] = &handler_fb_read_lvl_bp;
+	opcodes_funcs[0xfb] = &handler_fb_read_lvl_stack_len;
 }
 
 

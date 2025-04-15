@@ -14,8 +14,10 @@ OUT_NAME = cpourie
 
 ifeq ($(OS),Windows_NT)
 	OUT = $(OUT_DIR)/$(OUT_NAME).exe
+	RM = powershell -NoProfile -Command rm -r -force
 else
 	OUT = $(OUT_DIR)/$(OUT_NAME)
+	RM = rm -f
 endif
 
 
