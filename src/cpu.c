@@ -87,21 +87,21 @@ void set_interrupt(cpu_t *cpu, u8 interrupt) {
 u32 *get_Uregister_ptr(cpu_t *cpu, u8 reg) {
 	switch (reg) {
 		case 0:  return &cpu->r.r_do;
-		case 2:  return &cpu->r.r_do$;
-		case 3:  return &cpu->r.r_re;
-		case 4:  return &cpu->r.r_re$;
-		case 5:  return &cpu->r.r_mi;
-		case 6:  return &cpu->r.r_fa;
-		case 7:  return &cpu->r.r_fa$;
-		case 8:  return &cpu->r.r_so;
-		case 9:  return &cpu->r.r_so$;
-		case 10: return &cpu->r.r_la;
-		case 11: return &cpu->r.r_la$;
-		case 12: return &cpu->r.r_si;
-		case 13: return &cpu->r.r_in;
-		case 14: return &cpu->r.r_ou;
-		case 15: return &cpu->r.r_sp;
-		case 16: return &cpu->r.r_bp;
+		case 1:  return &cpu->r.r_do$;
+		case 2:  return &cpu->r.r_re;
+		case 3:  return &cpu->r.r_re$;
+		case 4:  return &cpu->r.r_mi;
+		case 5:  return &cpu->r.r_fa;
+		case 6:  return &cpu->r.r_fa$;
+		case 7:  return &cpu->r.r_so;
+		case 8:  return &cpu->r.r_so$;
+		case 9: return &cpu->r.r_la;
+		case 10: return &cpu->r.r_la$;
+		case 11: return &cpu->r.r_si;
+		case 12: return &cpu->r.r_in;
+		case 13: return &cpu->r.r_ou;
+		case 14: return &cpu->r.r_sp;
+		case 15: return &cpu->r.r_bp;
 		default: return NULL;
 	}
 }

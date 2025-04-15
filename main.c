@@ -7,11 +7,11 @@ int main(int argc, char **argv) {
 	init_opcodes();
 	cpu_t *cpu = new_cpu(0x10000);
 	cpu->memory[0] = 0x6c;
-	cpu->memory[1] = 0b11001011;
+	cpu->memory[1] = 0b11111011;
 	cpu->memory[2] = 0x01;
 	cpu->memory[3] = 0x23;
 	cpu->memory[4] = 0x45;
-	cpu->memory[5] = 0x67;
+	cpu->memory[5] = 0x99;
 
 	while (1) {
 		if (cpu->r.interrupt != 0)

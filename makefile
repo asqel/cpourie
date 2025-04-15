@@ -46,18 +46,10 @@ debug:
 	valgrind $(OUT)
 
 clean:
-ifeq ($(OS),Windows_NT)
-	powershell -NoProfile -Command rm -r -force $(BIN)
-else
-	rm -rf $(BIN)
-endif
+	$(RM) $(BIN)
 
 fclean: clean
-ifeq ($(OS),Windows_NT)
-	powershell -NoProfile -Command rm -r -force $(OUT)
-else
-	rm -rf $(OUT)
-endif
+	$(RM) $(OUT)
 
 re: fclean all
 
