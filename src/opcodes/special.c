@@ -118,3 +118,13 @@ void handler_fb_read_lvl_stack_len(cpu_t *cpu) {
 		return set_interrupt(cpu, CPU_INT_PRIVILEGE);
 	cpu->r.r_si = cpu->r.level_stack_len;
 }
+
+void handler_00_halt(cpu_t *cpu) {
+	if (cpu->r.level != CPU_LV_K)
+		return set_interrupt(cpu, CPU_INT_PRIVILEGE);
+	cpu->is_halted = 1;
+}
+
+void handler_01_halt_int(cpu_t *cpu) {
+	cpu->is_halted = 2;
+}

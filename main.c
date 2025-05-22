@@ -3,6 +3,26 @@
 #include "cpu.h"
 #include "opcodes.h"
 
+// void *cpu_thread(void *arg) {
+// 	cpu_t *cpu = arg;
+// 	while (1) {
+// 		if (cpu->is_halted == 1)
+// 			break;
+// 		if (cpu->r.interrupt != 0) {
+// 			printf("CPU RECEIVED INTERRUPT %d\n", cpu->r.interrupt);
+// 			if (cpu->is_halted == 2)
+// 				cpu->is_halted = 0;
+// 			continue;
+// 		}
+// 		if (cpu->is_halted == 0) {
+// 			do_opcode(cpu);
+// 			if (cpu->r.interrupt != 0)
+// 		}
+
+// 	}
+// 	return (NULL);
+// }
+
 int main(int argc, char **argv) {
 	init_opcodes();
 	cpu_t *cpu = new_cpu(0x10000);

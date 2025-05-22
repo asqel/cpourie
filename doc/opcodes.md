@@ -9,8 +9,8 @@ Used opcode
 
 | low\\high| 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | A | B | C | D | E | F |
 |----------|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-|    0     |   |   | X | X |   |   | X |   | X | X | X | X | X | X |   | X |
-|    1     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   | X |
+|    0     | X |   | X | X |   |   | X |   | X | X | X | X | X | X |   | X |
+|    1     | X |   | X | X |   |   |   |   | X | X | X | X | X |   |   | X |
 |    2     |   |   | X | X |   |   |   |   | X | X | X | X | X |   | X | X |
 |    3     |   |   | X | X |   | X |   | X | X | X | X | X | X |   |   | X |
 |    4     |   |   | X | X |   |   |   |   | X | X | X | X | X |   |   | X |
@@ -307,3 +307,11 @@ read_lvl_bp:
 
 read_lvl_stack_len:
 	0xFD
+
+halt:
+	0x00
+	halt the cpu and shutdown (only in kernel mod)
+
+halt_int:
+	0x01
+	halt the cpu until an interrupt is thrown

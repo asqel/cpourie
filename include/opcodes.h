@@ -114,4 +114,7 @@ void handler_fb_read_lvl_sp(cpu_t *cpu);
 void handler_fb_read_lvl_bp(cpu_t *cpu);
 void handler_fb_read_lvl_stack_len(cpu_t *cpu);
 
+void handler_00_halt(cpu_t *cpu);
+void handler_01_halt_int(cpu_t *cpu);
+
 #endif

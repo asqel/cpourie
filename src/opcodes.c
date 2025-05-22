@@ -107,6 +107,8 @@ void init_opcodes() {
 	opcodes_funcs[0xfb] = &handler_fb_read_lvl_sp;
 	opcodes_funcs[0xfb] = &handler_fb_read_lvl_bp;
 	opcodes_funcs[0xfb] = &handler_fb_read_lvl_stack_len;
+	opcodes_funcs[0x00] = &handler_00_halt;
+	opcodes_funcs[0x01] = &handler_01_halt_int;
 }
 
 
