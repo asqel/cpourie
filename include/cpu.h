@@ -5,18 +5,18 @@
 
 #define PCI_BASE 0x400
 #define PCI_NUM 32 // pci at index 0 is pci controller
-#define PCI_SPACE_LEN 4 * 4 // each pci is assign 4 u32
+#define PCI_SPACE_LEN 16 // each pci is assign 4 u32
 #define PCI_MAX_ADDR ((PCI_BASE) + (PCI_NUM) * (PCI_SPACE_LEN))
 
 #define CPU_START_ADDR 4096
 
-struct cpu_t;
-struct cpu_pci_t;
+typedef struct cpu_t cpu_t;
+typedef struct cpu_pci_t cpu_pci_t;
 
 typedef void (*pci_callback_t)(struct cpu_t *cpu, struct cpu_pci_t *self);
 
 typedef struct cpu_pci_t{
-	u32 addr;
+	u32 addr_space;
 	u8 idx;
 	char *name;
 	pci_callback_t callback;
@@ -83,12 +83,13 @@ status bits
 #define CPU_STAT_Iless(X) (((X).r.r_status >> 4) & 1)
 #define CPU_STAT_Igreater(X) (((X).r.r_status >> 5) & 1)
 
-typedef struct {
+typedef struct cpu_t {
+	cpu_pci_t pcis[PCI_NUM];
+
 	registers_t r;
 	u8 *memory;
 	u32 mem_size;
 	u8 is_halted;
-	cpu_pci_t pcis[PCI_NUM];
 } cpu_t;
 
 #define TYPE_SIZE(X) (((u32 [4]){1, 2, 4, 0})[X])

@@ -8,6 +8,8 @@
 		"cpu.h": "c",
 		"types.h": "c",
 		"stdio.h": "c",
-		"stdint.h": "c"
+		"stdint.h": "c",
+		"pci.h": "c",
+		"__locale": "c"
 	}
 }

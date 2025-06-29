@@ -1,5 +1,5 @@
 cpu start with pc = 0x1000
 cpu has at least 4916 + 8192 bytes of memory
 pci space start at 0x400
-each pci has 4 u32
+each pci has 16 bytes of space in memory
 pci at index 0 is the pci controller

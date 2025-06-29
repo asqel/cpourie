@@ -2,6 +2,7 @@
 #include <string.h>
 #include "cpu.h"
 #include "opcodes.h"
+#include "pci.h"
 
 typedef struct {
 	char dump;
@@ -74,6 +75,7 @@ int main(int argc, char **argv) {
 	run_args_t args = init_args(argc, argv);
 	cpu_t *cpu = new_cpu(args.mem_size);
 	init_opcodes();
+	init_pci(cpu);
 
 	if (load_prog(cpu, args.prog) != 0) {
 		free_cpu(cpu);
@@ -85,6 +87,7 @@ int main(int argc, char **argv) {
 			printf("CPU RECEIVED INTERRUPT %d at PC:0x%04X(%d)\n", cpu->r.interrupt, cpu->r.r_pc, cpu->r.r_pc);
 			break;
 		}
+		call_pcis(cpu);
 		if (!cpu->is_halted) {
 			if (args.step) {
 				if (getchar() == 'd')
