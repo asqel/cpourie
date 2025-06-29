@@ -21,29 +21,29 @@ int load_prog(cpu_t *cpu, char *prog) {
 	fseek(f, 0, SEEK_END);
 	len = ftell(f);
 	fseek(f, 0, SEEK_SET);
-	if (len > cpu->mem_size) {
+	if (len > cpu->mem_size - CPU_START_ADDR) {
 		fprintf(stderr, "Program size (%d bytes) exceeds memory size (%d bytes).\n", len, cpu->mem_size);
 		fclose(f);
 		return 1;
 	}
-	fread(cpu->memory, 1, len, f);
+	fread(&cpu->memory[CPU_START_ADDR], 1, len, f);
 	fclose(f);
 	return 0;
 }
 
 run_args_t init_args(int argc, char **argv) {
 	run_args_t args = {0};
-	args.mem_size = 0xFFFFF;
+	args.mem_size = CPU_START_ADDR + 0x2000;
 
 	for (int i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "--dump") == 0 || strcmp(argv[i], "-d") == 0)
 			args.dump = 1;
 		else if (strcmp(argv[i], "--step") == 0 || strcmp(argv[i], "-s") == 0)
 			args.step = 1;
-		else if (strncmp(argv[i], "--mem-size", 11) == 0 || strncmp(argv[i], "-m", 3) == 0) {
+		else if (strcmp(argv[i], "--mem-size") == 0 || strcmp(argv[i], "-m") == 0) {
 			if (i + 1 < argc) {
 				args.mem_size = strtoul(argv[++i], NULL, 0);
-				if (args.mem_size == 0) {
+				if (args.mem_size == 0 || args.mem_size < CPU_START_ADDR + 0x1000) {
 					fprintf(stderr, "Invalid memory size: %s\n", argv[i]);
 					exit(1);
 				}

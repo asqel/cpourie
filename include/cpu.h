@@ -3,10 +3,12 @@
 
 #include "types.h"
 
-#define PCI_BASE 0x0ABC
+#define PCI_BASE 0x400
 #define PCI_NUM 32 // pci at index 0 is pci controller
 #define PCI_SPACE_LEN 4 * 4 // each pci is assign 4 u32
 #define PCI_MAX_ADDR ((PCI_BASE) + (PCI_NUM) * (PCI_SPACE_LEN))
+
+#define CPU_START_ADDR 4096
 
 struct cpu_t;
 struct cpu_pci_t;

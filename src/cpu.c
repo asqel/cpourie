@@ -9,6 +9,7 @@ cpu_t *new_cpu(u32 mem_size) {
 
 	cpu->mem_size = mem_size;
 	cpu->memory = malloc(sizeof(u8) * cpu->mem_size);
+	cpu->r.r_pc = CPU_START_ADDR;
 
 	return cpu;
 }
