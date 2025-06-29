@@ -5,19 +5,9 @@
 
 typedef  void (*opcode_handler_t)(cpu_t *);
 
-opcode_handler_t *opcodes_funcs = NULL;
-
-void exit_opcode() {
-	free(opcodes_funcs);
-}
+opcode_handler_t opcodes_funcs[256] = {NULL};
 
 void init_opcodes() {
-	if (opcodes_funcs == NULL)
-	{
-		atexit(exit_opcode);
-		opcodes_funcs = calloc(256, sizeof(opcode_handler_t));
-	}
-
 	opcodes_funcs[0x6c] = &handler_6c_ld;
 	opcodes_funcs[0x6a] = &handler_6a_ld;
 	opcodes_funcs[0x60] = &handler_60_ld;

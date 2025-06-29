@@ -3,52 +3,111 @@
 #include "cpu.h"
 #include "opcodes.h"
 
-// void *cpu_thread(void *arg) {
-// 	cpu_t *cpu = arg;
-// 	while (1) {
-// 		if (cpu->is_halted == 1)
-// 			break;
-// 		if (cpu->r.interrupt != 0) {
-// 			printf("CPU RECEIVED INTERRUPT %d\n", cpu->r.interrupt);
-// 			if (cpu->is_halted == 2)
-// 				cpu->is_halted = 0;
-// 			continue;
-// 		}
-// 		if (cpu->is_halted == 0) {
-// 			do_opcode(cpu);
-// 			if (cpu->r.interrupt != 0)
-// 		}
+typedef struct {
+	char dump;
+	char dump_mem;
+	char step;
+	char *prog;
+	u32 mem_size;
+} run_args_t;
 
-// 	}
-// 	return (NULL);
-// }
+int load_prog(cpu_t *cpu, char *prog) {
+	FILE *f = fopen(prog, "rb");
+	if (f == NULL) {
+		perror(prog);
+		return 1;
+	}
+	u32 len = 0;
+	fseek(f, 0, SEEK_END);
+	len = ftell(f);
+	fseek(f, 0, SEEK_SET);
+	if (len > cpu->mem_size) {
+		fprintf(stderr, "Program size (%d bytes) exceeds memory size (%d bytes).\n", len, cpu->mem_size);
+		fclose(f);
+		return 1;
+	}
+	fread(cpu->memory, 1, len, f);
+	fclose(f);
+	return 0;
+}
+
+run_args_t init_args(int argc, char **argv) {
+	run_args_t args = {0};
+	args.mem_size = 0xFFFFF;
+
+	for (int i = 1; i < argc; i++) {
+		if (strcmp(argv[i], "--dump") == 0 || strcmp(argv[i], "-d") == 0)
+			args.dump = 1;
+		else if (strcmp(argv[i], "--step") == 0 || strcmp(argv[i], "-s") == 0)
+			args.step = 1;
+		else if (strncmp(argv[i], "--mem-size", 11) == 0 || strncmp(argv[i], "-m", 3) == 0) {
+			if (i + 1 < argc) {
+				args.mem_size = strtoul(argv[++i], NULL, 0);
+				if (args.mem_size == 0) {
+					fprintf(stderr, "Invalid memory size: %s\n", argv[i]);
+					exit(1);
+				}
+			}
+			else {
+				fprintf(stderr, "Memory size option requires a value.\n");
+				exit(1);
+			}
+		}
+		else if (strcmp(argv[i], "--dump-mem") == 0 || strcmp(argv[i], "-dm") == 0)
+			args.dump_mem = 1;
+		else {
+			if (args.prog != NULL) {
+				fprintf(stderr, "Multiple program files specified: %s and %s\n", args.prog, argv[i]);
+				exit(1);
+			}
+			args.prog = argv[i];
+		}
+	}
+	if (args.prog == NULL) {
+		fprintf(stderr, "No program file specified.\n");
+		exit(1);
+	}
+	return args;
+}
 
 int main(int argc, char **argv) {
+	run_args_t args = init_args(argc, argv);
+	cpu_t *cpu = new_cpu(args.mem_size);
 	init_opcodes();
-	cpu_t *cpu = new_cpu(0x10000);
-	cpu->memory[0] = 0x6c;
-	cpu->memory[1] = 0b11111011;
-	cpu->memory[2] = 0x01;
-	cpu->memory[3] = 0x23;
-	cpu->memory[4] = 0x45;
-	cpu->memory[5] = 0x99;
 
+	if (load_prog(cpu, args.prog) != 0) {
+		free_cpu(cpu);
+		return 1;
+	}
 	while (1) {
 		if (cpu->r.interrupt != 0)
 		{
-			printf("CPU RECEIVED INTERRUPT %d\n", cpu->r.interrupt);
+			printf("CPU RECEIVED INTERRUPT %d at PC:0x%04X(%d)\n", cpu->r.interrupt, cpu->r.r_pc, cpu->r.r_pc);
 			break;
 		}
-		if (!cpu->is_halted)
+		if (!cpu->is_halted) {
+			if (args.step) {
+				if (getchar() == 'd')
+					dump_registers(cpu);
+			}
 			do_opcode(cpu);
+		}
+		else
+			break;
 	}
 
-	//FILE *f = fopen("./memory.dat", "w+");
-	//fwrite(cpu->memory, 1, cpu->mem_size, f);
-	//fclose(f);
-
-	if (argc == 2 && (strcmp(argv[1], "--dump") == 0 || strcmp(argv[1], "-d") == 0))
+	if (args.dump)
 		dump_registers(cpu);
+	if (args.dump_mem) {
+		FILE *f = fopen("memory.bin", "wb");
+		if (f == NULL) {
+			perror("memory.bin");
+			free_cpu(cpu);
+			return 1;
+		}
+		fwrite(cpu->memory, 1, cpu->mem_size, f);
+		fclose(f);
+	}
 	free_cpu(cpu);
 	return 0;
 }
